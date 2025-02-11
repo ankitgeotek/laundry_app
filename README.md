@@ -1,5 +1,4 @@
-# laundry_app
-
+# **laundry_app**
 
 ## **Project Setup Guide**
 
@@ -26,7 +25,7 @@ backend\lib\.venv\Scripts\Activate.ps1
 ---
 
 ### **Installing Dependencies**
-After activating the environment, install the required packages:
+After activating the environment, install the required backend dependencies:
 ```bash
 pip install -r backend/requirements.txt
 ```
@@ -51,10 +50,21 @@ uvicorn app.main:app --reload
 
 ---
 
-### **Running the Frontend (React Web App)**
+### **Setting Up the Frontend (React Web App)**
+Before running the frontend, install dependencies:
+```bash
+cd web_app/
+
+# Install required packages
+npm install
+```
+
+---
+
+### **Running the Frontend**
 To start the frontend application:
 ```bash
-# Deactivate any active virtual environment
+# Deactivate any active virtual environment (if needed)
 deactivate
 
 # Navigate to the web app directory
