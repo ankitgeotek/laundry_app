@@ -1,0 +1,66 @@
+/* src/components/ServiceCard.css */
+
+/* Default Light Mode Styling */
+.service-card {
+  background-color: #fff;  /* White background */
+  border: 1px solid #ddd;  /* Light border */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, background-color 0.3s ease-in-out;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Service image */
+.service-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+/* Content container */
+.service-content {
+  padding: 1rem;
+}
+
+/* Text styles */
+.service-name {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #232d41; /* Dark gray */
+}
+
+.service-description {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #333; /* Medium gray */
+}
+
+.service-price,
+.service-category {
+  font-size: 0.9rem;
+  color: #666; /* Light gray */
+}
+
+/* Dark Mode Support */
+.layout-container.dark .service-card {
+  background-color: #222222;  /* Dark gray background */
+  border: 1px solid #444444;  /* Slightly lighter border */
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.layout-container.dark .service-name {
+  color: #e0e0e0; /* Light gray */
+}
+
+.layout-container.dark .service-description {
+  color: #dcdcdc; /* Light gray text */
+}
+
+.layout-container.dark .service-price,
+.layout-container.dark .service-category {
+  color: #b0b0b0; /* Dim gray */
+}

@@ -1,0 +1,21 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore log files
+*.log
+
+# Ignore environment files
+backend/lib/.venv/
+.env
+venv/
+.venv/
+*.sqlite3
+
+# Ignore node_modules folder
+node_modules/
+
+# Ignore build files
+dist/
+build/
