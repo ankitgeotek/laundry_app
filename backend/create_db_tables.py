@@ -1,4 +1,4 @@
-# manageDB.py
+# backend/create_db_tables.py
 from sqlalchemy import create_engine
 from app.models import Base
 from app.config import DATABASE_URL

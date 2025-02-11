@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from app.routes.user_routes import router as user_router
 from app.routes.service_routes import router as service_router
-from app.routes.kart_routes import router as kart_router
+from app.routes.cart_routes import router as cart_router
 from app.middleware.jwt_middleware import JWTMiddleware
 
 """
@@ -41,7 +41,7 @@ app.add_middleware(JWTMiddleware)
 
 app.include_router(user_router) # Include user authentication and profile endpoints.
 app.include_router(service_router) # Include services endpoints.
-app.include_router(kart_router) # Include kart endpoints.
+app.include_router(cart_router) # Include kart endpoints.
 
 
 def custom_openapi():

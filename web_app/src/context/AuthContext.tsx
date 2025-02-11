@@ -1,13 +1,22 @@
 // src/context/AuthContext.tsx
 /**
- * Authentication context.
- * Provides state and functions for logging in, signing up, and logging out.
+ * AuthContext Module.
+ *
+ * Provides authentication state and functions (login, signup, logout).
+ * Now stores user details (token and name) so that the header can display a welcome message.
  */
-import { createContext, useState, useEffect, ReactNode } from 'react';
+
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { loginApi, signupApi } from '../services/api';
 
+interface User {
+  token: string;
+  name: string;
+  // Additional fields as needed.
+}
+
 interface AuthContextProps {
-  user: string | null;
+  user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<any>;
   signup: (userData: Record<string, string>) => Promise<any>;
@@ -22,24 +31,18 @@ export const AuthContext = createContext<AuthContextProps>({
   logout: () => {}
 });
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-/**
- * AuthProvider wraps the application and manages authentication state.
- */
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<string | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Check for a stored token on mount.
+  // On mount, load the stored token and user name.
   useEffect(() => {
     const loadUserData = () => {
       try {
-        const token = localStorage.getItem('userToken');
-        if (token) {
-          setUser(token);
+        const userToken = localStorage.getItem('userToken');
+        const userName = localStorage.getItem('userName');
+        if (userToken && userName) {
+          setUser({ token: userToken, name: userName });
         }
       } catch (error) {
         console.error('Error loading user token:', error);
@@ -50,15 +53,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loadUserData();
   }, []);
 
-  /**
-   * Logs in the user by calling the login API.
-   */
   const login = async (email: string, password: string) => {
     try {
       const response = await loginApi(email, password);
-      if (response.access_token) {
-        setUser(response.access_token);
+      // Expect the response to include access_token and a user object with a name.
+      if (response.access_token && response.user) {
+        setUser({ token: response.access_token, name: response.user.name });
         localStorage.setItem('userToken', response.access_token);
+        localStorage.setItem('userName', response.user.name);
       }
       return response;
     } catch (error) {
@@ -67,9 +69,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  /**
-   * Signs up the user by calling the signup API.
-   */
   const signup = async (userData: Record<string, string>) => {
     try {
       const response = await signupApi(userData);
@@ -80,12 +79,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  /**
-   * Logs out the user by clearing the stored token.
-   */
   const logout = () => {
     setUser(null);
     localStorage.removeItem('userToken');
+    localStorage.removeItem('userName');
   };
 
   return (
