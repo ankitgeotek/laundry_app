@@ -1,34 +1,32 @@
 // src/App.tsx
 /**
- * Main application component.
- * Sets up routing, wraps the app with AuthProvider and ThemeProvider,
- * and uses the Layout component for protected routes.
+ * Main Application Component.
+ *
+ * Sets up routing and wraps the app with AuthProvider and ThemeProvider.
+ * Protected routes are wrapped with Layout (which includes Header with CartIcon and welcome message).
  */
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
+import CartPage from './pages/CartPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 
 const AppRoutes = () => {
   const { user, loading } = useContext(AuthContext);
 
-  // Show a loading indicator while authentication state is determined.
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '2rem' }}>Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
     <Routes>
-      {/* Public Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-
-      {/* Protected Routes wrapped in Layout for header/sidebar/footer */}
       <Route
         path="/home"
         element={
@@ -39,8 +37,16 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Default Redirect */}
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <CartPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<Navigate to={user ? '/home' : '/login'} replace />} />
     </Routes>
   );

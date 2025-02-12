@@ -2,8 +2,8 @@
 /**
  * Layout Component.
  *
- * Combines the Header, Sidebar, Main, and Footer components into a cohesive layout.
- * The Header includes a sidebar toggle button and a theme toggle button.
+ * Combines the Header, Sidebar, Main content, and Footer components.
+ * The Header includes a welcoming message and a cart link.
  */
 import React, { useState, useContext } from 'react';
 import Header from './Header';
@@ -22,7 +22,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className={`layout-container ${theme}`}>
-      <Header onToggleSidebar={handleToggleSidebar} toggleTheme={toggleTheme} theme={theme} />
+      <Header
+        onToggleSidebar={handleToggleSidebar}
+        toggleTheme={toggleTheme}
+        theme={theme}
+      />
       <div className="content-area">
         <Sidebar isOpen={sidebarOpen} />
         <main className="main">{children}</main>

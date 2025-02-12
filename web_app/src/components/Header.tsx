@@ -2,16 +2,18 @@
 /**
  * Header Component.
  *
- * Renders the application header with a sidebar toggle button and a theme toggle button.
- * The theme toggle button is implemented using the ThemeToggle component.
- *
- * Props:
- * - onToggleSidebar: Callback function to toggle the sidebar.
- * - toggleTheme: Callback function to toggle between light and dark mode.
- * - theme: The current theme.
+ * Renders the application header with:
+ * - A button to toggle the sidebar.
+ * - A welcome message displaying the logged-in user's name.
+ * - A theme toggle button.
+ * - A cart icon that navigates to the cart page.
  */
-import React from 'react';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import CartIcon from './CartIcon';
+import { AuthContext } from '../context/AuthContext';
+import './Header.css';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -20,14 +22,21 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar, toggleTheme, theme }) => {
+  const { user } = useContext(AuthContext);
+
   return (
     <header className="header">
       <button onClick={onToggleSidebar} className="toggle-sidebar-button">
         ☰
       </button>
-      <h1>--- Indian Laundry House ---</h1>
-      {/* Use the ThemeToggle component for switching theme */}
-      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+      <div className="header-middle">
+        <h1>My Web App</h1>
+        {user && user.name && <span className="welcome-message">Welcome, {user.name}!</span>}
+      </div>
+      <div className="header-right">
+        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+        <CartIcon />
+      </div>
     </header>
   );
 };

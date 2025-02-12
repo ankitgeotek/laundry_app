@@ -7,4 +7,4 @@ from .payment import Payment
 from .review import Review
 from .inventory import Inventory
 from .delivery import Delivery
-from .kart import Kart  
+from .cart import Cart  

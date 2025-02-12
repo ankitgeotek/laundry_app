@@ -1,22 +1,23 @@
 // src/services/api.ts
 /**
- * API service module.
+ * API Service Module.
  *
  * Uses Axios to centralize API requests and automatically attaches the authentication token.
+ * Contains functions for authentication, service fetching, and cart operations.
  */
 import axios from 'axios';
+import { ServiceResponseSchema } from '../validators/service_validator';
 
-const API_BASE_URL = 'http://127.0.0.1:8000'; // Replace with your actual backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+// const API_BASE_URL = 'http://127.0.0.1:8000'; // Replace with your actual backend URL
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000, // 10 seconds timeout
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  timeout: 10000,
+  headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor to attach the token (if available)
+// Attach token to every request if available.
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('userToken');
@@ -28,26 +29,17 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-/**
- * fetchServices: Retrieves all available services from the backend.
- *
- * Assumes the endpoint returns an array of service objects.
- *
- * @returns {Promise<ServiceResponseSchema[]>} A promise that resolves to an array of services.
- */
+// Fetch services
 export const fetchServices = async (): Promise<ServiceResponseSchema[]> => {
   try {
     const response = await apiClient.get('/services/');
-    // If the endpoint returns an array directly, we can return response.data.
     return response.data;
   } catch (error: any) {
     throw error.response ? error.response.data : error;
   }
 };
 
-/**
- * Existing API functions for login and signup can remain here...
- */
+// Authentication APIs
 export const loginApi = async (email: string, password: string) => {
   try {
     const response = await apiClient.post('/auth/login', { email, password });
@@ -66,5 +58,48 @@ export const signupApi = async (userData: Record<string, string>) => {
   }
 };
 
-// Import the response schema type (defined in validators/service_validator.ts)
-import { ServiceResponseSchema } from '../validators/service_validator';
+// Cart operations
+export const fetchCartItems = async (): Promise<any[]> => {
+  try {
+    const response = await apiClient.get('/cart/');
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const updateCartItem = async (itemId: number, data: any): Promise<any> => {
+  try {
+    const response = await apiClient.put(`/cart/${itemId}`, data);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const deleteCartItem = async (itemId: number): Promise<any> => {
+  try {
+    const response = await apiClient.delete(`/cart/${itemId}`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const clearCart = async (): Promise<any> => {
+  try {
+    const response = await apiClient.delete(`/cart/clear`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
+export const getCartTotal = async (): Promise<number> => {
+  try {
+    const response = await apiClient.get(`/cart/total`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
