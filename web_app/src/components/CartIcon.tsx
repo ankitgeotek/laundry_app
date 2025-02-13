@@ -2,36 +2,34 @@
 /**
  * CartIcon Component.
  *
- * Displays a cart icon with a badge showing the number of items in the cart.
+ * Displays a cart icon with a badge showing the number of items.
+ * Uses CartContext so that it always reflects the current cart count.
  * When clicked, navigates the user to the cart page.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchCartItems } from '../services/api';
+import { CartContext } from '../context/CartContext';
 import './CartIcon.css';
 
 const CartIcon: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
+  const { cartCount, refreshCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  // Fetch cart items count on mount.
+  // Optionally, refresh the cart count when the window gains focus.
   useEffect(() => {
-    const loadCount = async () => {
-      try {
-        const items = await fetchCartItems();
-        const total = items.reduce((acc: number, item: any) => acc + item.quantity, 0);
-        setCount(total);
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
+    const handleFocus = () => {
+      refreshCart();
     };
-    loadCount();
-  }, []);
+    window.addEventListener('focus', handleFocus);
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [refreshCart]);
 
   return (
     <div className="cart-icon" onClick={() => navigate('/cart')}>
       <span role="img" aria-label="cart">🛒</span>
-      {count > 0 && <span className="cart-badge">{count}</span>}
+      {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
     </div>
   );
 };

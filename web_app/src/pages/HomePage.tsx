@@ -3,65 +3,44 @@
  * HomePage Component.
  *
  * Fetches and displays all available services using the ServiceCard component.
- * This component is displayed once the customer has logged in.
+ * Services are displayed in a responsive grid.
  */
-
 import React, { useEffect, useState } from 'react';
 import { fetchServices } from '../services/api';
 import { ServiceResponseSchema } from '../validators/service_validator';
 import ServiceCard from '../components/ServiceCard';
-import './HomePage.css'; // Optional: CSS for HomePage layout
-
-// Define the expected service type separately
-type ServiceType = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category?: string;
-};
+import './HomePage.css';
 
 const HomePage: React.FC = () => {
-  // State to hold the list of services.
-  const [services, setServices] = useState<ServiceType[]>([]); // FIXED: Use explicit type instead of Zod schema
-  // State to manage the loading indicator.
+  const [services, setServices] = useState<ServiceResponseSchema[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  // State to store error messages.
-  const [error, setError] = useState<string | null>(null); // Use null for better type safety
+  const [error, setError] = useState<string>('');
 
-  // Fetch services when the component mounts.
   useEffect(() => {
-    const getServices = async () => {
+    const loadServices = async () => {
       try {
         const data = await fetchServices();
         setServices(data);
-      } catch (err: unknown) {
+      } catch (err: any) {
         console.error('Error fetching services:', err);
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Failed to fetch services.');
-        }
+        setError(err.detail || 'Failed to fetch services.');
       } finally {
         setLoading(false);
       }
     };
-    getServices();
+    loadServices();
   }, []);
 
-  // Show a loading state while fetching data.
   if (loading) {
     return <div>Loading services...</div>;
   }
-
-  // Show an error message if there's an error.
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   return (
     <div className="home-container">
-      <h1>Select Services</h1>
+      <h1>Our Services</h1>
       <div className="services-grid">
         {services.map((service) => (
           <ServiceCard key={service.id} service={service} />

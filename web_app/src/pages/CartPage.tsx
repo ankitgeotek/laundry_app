@@ -2,20 +2,22 @@
 /**
  * CartPage Component.
  *
- * Displays all cart items for the authenticated user, handles empty cart cases,
+ * Displays all cart items for the authenticated user, handles cases for empty cart,
  * shows a summary including total price, and provides buttons to proceed to checkout or clear the cart.
+ * After any cart operation, it also refreshes the global cart count from CartContext.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { fetchCartItems, clearCart, getCartTotal } from '../services/api';
 import CartItem from '../components/CartItem';
+import { CartContext } from '../context/CartContext';
 import './CartPage.css';
-
 
 const CartPage: React.FC = () => {
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const { refreshCart } = useContext(CartContext);
 
   const loadCart = async () => {
     setLoading(true);
@@ -24,6 +26,8 @@ const CartPage: React.FC = () => {
       setItems(data);
       const totalPrice = await getCartTotal();
       setTotal(totalPrice);
+      // Update the global cart count
+      refreshCart();
     } catch (err: any) {
       console.error('Error fetching cart items:', err);
       setError(err.detail || 'Failed to fetch cart items.');

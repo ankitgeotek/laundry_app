@@ -2,14 +2,13 @@
 /**
  * API Service Module.
  *
- * Uses Axios to centralize API requests and automatically attaches the authentication token.
+ * Uses Axios to centralize API requests and automatically attach the authentication token.
  * Contains functions for authentication, service fetching, and cart operations.
  */
 import axios from 'axios';
 import { ServiceResponseSchema } from '../validators/service_validator';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-// const API_BASE_URL = 'http://127.0.0.1:8000'; // Replace with your actual backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL; // Imported from .env
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -59,6 +58,19 @@ export const signupApi = async (userData: Record<string, string>) => {
 };
 
 // Cart operations
+export const addCartItem = async (cartData: {
+  service_id: number;
+  quantity?: number;
+  custom_instructions?: string;
+}): Promise<any> => {
+  try {
+    const response = await apiClient.post('/cart/', cartData);
+    return response.data;
+  } catch (error: any) {
+    throw error.response ? error.response.data : error;
+  }
+};
+
 export const fetchCartItems = async (): Promise<any[]> => {
   try {
     const response = await apiClient.get('/cart/');

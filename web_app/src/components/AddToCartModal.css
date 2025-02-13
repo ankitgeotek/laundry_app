@@ -1,0 +1,145 @@
+/* src/components/AddToCartModal.css */
+
+/* CSS Variables for theme colors */
+:root {
+    --light-bg: #ffffff;
+    --light-text: #333333;
+    --light-border: #ddd;
+    --light-header-bg: #f1f1f1;
+    --light-button-bg: #007bff;
+    --light-button-hover: #0056b3;
+  
+    --dark-bg: #1a1a1a;
+    --dark-text: #e0e0e0;
+    --dark-border: #444444;
+    --dark-header-bg: #2c2c2c;
+    --dark-button-bg: #2196f3;
+    --dark-button-hover: #1976d2;
+  }
+  
+  /* Modal overlay: covers entire viewport and centers modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal container styling */
+  .modal-container {
+    background-color: var(--light-bg);
+    color: var(--light-text);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Dark theme modifications */
+  .modal-container.dark {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+  }
+  
+  /* Modal header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--light-header-bg);
+  }
+  
+  .modal-container.dark .modal-header {
+    background-color: var(--dark-header-bg);
+  }
+  
+  .modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  /* Close button */
+  .modal-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: inherit;
+  }
+  
+  /* Modal body */
+  .modal-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .modal-label {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-input,
+  .modal-textarea {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--light-border);
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+  
+  .modal-container.dark .modal-input,
+  .modal-container.dark .modal-textarea {
+    border: 1px solid var(--dark-border);
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+  }
+  
+  /* Modal footer */
+  .modal-footer {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    background-color: var(--light-header-bg);
+  }
+  
+  .modal-container.dark .modal-footer {
+    background-color: var(--dark-header-bg);
+  }
+  
+  /* Confirm button */
+  .modal-confirm-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--light-button-bg);
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-container.dark .modal-confirm-button {
+    background-color: var(--dark-button-bg);
+  }
+  
+  .modal-confirm-button:hover {
+    background-color: var(--light-button-hover);
+  }
+  
+  .modal-container.dark .modal-confirm-button:hover {
+    background-color: var(--dark-button-hover);
+  }
+  
