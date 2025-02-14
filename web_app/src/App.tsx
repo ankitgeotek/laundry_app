@@ -2,13 +2,13 @@
 /**
  * Main Application Component.
  *
- * Sets up routing and wraps the app with AuthProvider and ThemeProvider.
- * Protected routes are wrapped with Layout (which includes Header with CartIcon and welcome message).
+ * Sets up routing and wraps the app with AuthProvider, ThemeProvider, and CartProvider.
  */
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { CartProvider } from './context/CartContext';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import HomePage from './pages/HomePage';
@@ -18,10 +18,7 @@ import Layout from './components/Layout';
 
 const AppRoutes = () => {
   const { user, loading } = useContext(AuthContext);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Routes>
@@ -56,9 +53,11 @@ const App = () => {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+        <CartProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </CartProvider>
       </AuthProvider>
     </ThemeProvider>
   );
